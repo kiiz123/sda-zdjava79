@@ -25,6 +25,41 @@ public class Workshop3b {
     }
 
     private static boolean addCity(City city) throws SQLException {
-        throw new UnsupportedOperationException("TODO");
+        boolean exists = false;
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/world", "root", "Pomidor1#")) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement("select exists ( select 1 from city where name=? and CountryCode=? );")) {
+                preparedStatement.setString(1, city.getName());
+                preparedStatement.setString(2, city.getCountryCode());
+                ResultSet rs = preparedStatement.executeQuery();
+                rs.next();
+                exists = rs.getBoolean(1);
+            }
+            if (exists) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement("update city set district=?,population=? where name=? and CountryCode=? ")) {
+                    preparedStatement.setString(1, city.getDistrict());
+                    preparedStatement.setInt(2, city.getPopulation());
+                    preparedStatement.setString(3, city.getName());
+                    preparedStatement.setString(4, city.getCountryCode());
+                    int rs = preparedStatement.executeUpdate();
+                }
+            }
+            if (!exists) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement("insert into CITY (Name, countrycode,district,population) values ( ? ,?, ?, ?);")) {
+                    preparedStatement.setString(1, city.getName());
+                    preparedStatement.setString(2, city.getCountryCode());
+                    preparedStatement.setString(3, city.getDistrict());
+                    preparedStatement.setInt(4, city.getPopulation());
+                    int rs = preparedStatement.executeUpdate();
+                    if (rs == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return !exists;
     }
+
 }
+
