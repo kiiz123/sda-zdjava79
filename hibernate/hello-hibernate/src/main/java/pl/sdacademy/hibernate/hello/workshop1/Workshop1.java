@@ -17,12 +17,16 @@ public class Workshop1 {
     }
 
     public static Country loadCountryByCode(String code) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("HelloHibernatePU");
+        EntityManagerFactory entityManagerFactory =
+                Persistence.createEntityManagerFactory("HelloHibernatePU");
+
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            return  entityManager.find(Country.class, code);
+        try{
+            return entityManager.find(Country.class,code);
+
         } finally {
             entityManagerFactory.close();
         }
+
     }
 }
