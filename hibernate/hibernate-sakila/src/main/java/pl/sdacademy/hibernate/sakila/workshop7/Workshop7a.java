@@ -3,8 +3,8 @@ package pl.sdacademy.hibernate.sakila.workshop7;
 import pl.sdacademy.hibernate.sakila.workhop6.Actor;
 import pl.sdacademy.hibernate.sakila.workhop6.Film;
 
-import java.util.List;
-import java.util.Scanner;
+import javax.persistence.*;
+import java.util.*;
 
 
 /**
@@ -36,6 +36,17 @@ public class Workshop7a {
     }
 
     public static List<Film> findFilmsByDescription(String descriptionPart) {
-        throw new UnsupportedOperationException("TODO");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("SakilaPU");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        String query =
+                "SELECT  distinct f FROM Film f JOIN FETCH f.actors JOIN FETCH f.language  WHERE f.description LIKE concat('%',:description,'%') ORDER BY title";
+
+        try {
+            TypedQuery<Film> typedQuery = entityManager.createQuery(query, Film.class);
+            return  typedQuery.setParameter("description", descriptionPart).getResultList();
+
+        } finally {
+            entityManagerFactory.close();
+        }
     }
 }
