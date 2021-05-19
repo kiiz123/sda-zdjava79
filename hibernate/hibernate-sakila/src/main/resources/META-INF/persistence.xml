@@ -1,7 +1,7 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
     <persistence-unit name="SakilaPU">
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:6306/sakila"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sakila"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="example"/>
             <property name="hibernate.show_sql" value="true"/>
